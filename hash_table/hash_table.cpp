@@ -1,7 +1,8 @@
 #include <iostream>
 using namespace std;
+#include <vector>
 #define hashTableSize 27
-string hashTable[hashTableSize];
+vector<string> hashTable[hashTableSize];
 
 int hashFunc(string s) {
     return s[0] - 'a';
@@ -9,26 +10,15 @@ int hashFunc(string s) {
 
 void insert(string s) {
     int index = hashFunc(s);
-    // collision linear and quadratic
-    int k = 1;
-    while (hashTable[index] != "") {
-        index = (index + k*k) % hashTableSize;
-        k++;
-    }
-    
-    hashTable[index] = s;
+    hashTable[index].push_back(s);
 }
 
-int search(string s) {
+bool search(string s) {
     int index = hashFunc(s);
-    int k = 1;
-    while (hashTable[index] != s) {
-        if (hashTable[index] == "")
-            return -1;
-        index = (index + k*k) % hashTableSize;
-        k++;
-    }
-    return index;
+    for(auto i : hashTable[index])
+        if(i == s) 
+            return true;
+    return false;
 }
 
 int main() {
