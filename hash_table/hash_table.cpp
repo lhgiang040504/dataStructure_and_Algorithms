@@ -9,6 +9,7 @@ int hashFunc(string s) {
 
 void insert(string s) {
     int index = hashFunc(s);
+    // collision
     while (hashTable[index] != "") {
         index = (index + 1) % hashTableSize;
     }
