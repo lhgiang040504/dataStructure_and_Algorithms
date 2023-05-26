@@ -9,19 +9,24 @@ int hashFunc(string s) {
 
 void insert(string s) {
     int index = hashFunc(s);
-    // collision
+    // collision linear and quadratic
+    int k = 1;
     while (hashTable[index] != "") {
-        index = (index + 1) % hashTableSize;
+        index = (index + k*k) % hashTableSize;
+        k++;
     }
+    
     hashTable[index] = s;
 }
 
 int search(string s) {
     int index = hashFunc(s);
+    int k = 1;
     while (hashTable[index] != s) {
         if (hashTable[index] == "")
             return -1;
-        index = (index + 1) % hashTableSize;
+        index = (index + k*k) % hashTableSize;
+        k++;
     }
     return index;
 }
