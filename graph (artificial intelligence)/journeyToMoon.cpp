@@ -18,6 +18,49 @@ vector<string> split(const string &);
 
 // the main funcetion to solve our proplem which use Depth-First Search
 int journeyToMoon(int n, vector<vector<int>> astronaut) {    
+    
+    vector<int> adjList[n];
+    for (const auto &pair : astronaut) {
+        adjList[pair[0]].push_back(pair[1]);
+        adjList[pair[1]].push_back(pair[0]);
+    }
+    
+    vector<bool> visited(n, false); // Track visited astronauts
+    vector<int> countries; // Track size of each contry
+
+    int sum = 0;
+    // DFS to find the sizes of different countries
+    for (int i = 0; i < n; i++) {
+        if (visited[i] == false) {
+            int count = 0;
+            stack<int> s;
+            s.push(i);
+            visited[i] = true;
+            
+            while (!s.empty()) {
+                int temp = s.top();
+                s.pop();
+                count ++;
+                
+                for (const auto &adjacency : adjList[temp]) {
+                    if (visited[adjacency] == false) {
+                        s.push(adjacency);
+                        visited[adjacency] = true;
+                    }
+                }
+            }
+            countries.push_back(count);
+            sum += count;
+        }
+    }
+    
+    // already have countries that contain size of each contry
+    int result = 0;
+    for (const auto &number : countries) {
+        result += number * (sum - number);
+        sum -= number;
+    }
+    return result;
 }
 
 int main()
