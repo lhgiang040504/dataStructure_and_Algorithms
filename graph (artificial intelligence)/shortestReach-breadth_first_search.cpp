@@ -11,14 +11,60 @@ vector<string> split(const string &);
  *
  * The function is expected to return an INTEGER_ARRAY.
  * The function accepts following parameters:
- *  1. INTEGER n
- *  2. INTEGER m
- *  3. 2D_INTEGER_ARRAY edges
- *  4. INTEGER s
+ *  1. INTEGER n numbers of nodes
+ *  2. INTEGER m number of edges
+ *  3. 2D_INTEGER_ARRAY edges 
+ *  4. INTEGER s start point
  */
 
-vector<int> shortestReach(int n, int m, vector<vector<int>> edges, int s) {
+int getShortestDistance(int start, int end, vector<int> adjList[], int dist) {
+    vector<bool> visited(adjList->size(), false);
+    queue<int> q;
 
+    q.push(start);
+    visited[start] = true;
+
+    while (!q.empty()) {
+        int currNode = q.front();
+        q.pop();
+
+        if (currNode == end) {
+            return dist;
+        }
+
+        for (int neighbor : adjList[currNode]) {
+            if (!visited[neighbor]) {
+                q.push(neighbor);
+                visited[neighbor] = true;
+            }
+            dist += 6;
+        }
+    }
+    return -1;
+}
+
+vector<int> shortestReach(int n, int m, vector<vector<int>> edges, int s) {
+    vector<int> adjList[n];
+    for (const auto &pair : edges) {
+        adjList[pair[0]].push_back(pair[1]);
+        adjList[pair[1]].push_back(pair[0]);
+    }
+    vector<int> dist(n, 0);
+    vector<bool> visited(n, false); // Track visited point
+    visited[s] = true;
+
+    for (const auto& node : adjList[s]) {
+        visited[node] = true;
+        dist[node] += 6;
+    }
+
+    for (int neighbor : adjList[s]) {
+        if (!visited[neighbor]) {
+            visited[neighbor] = true;
+            dist[neighbor] = getShortestDistance(s, neighbor, adjList, 6);
+        }
+    }
+    return dist;
 }
 
 int main()
@@ -52,8 +98,8 @@ int main()
 
             for (int j = 0; j < 2; j++) {
                 int edges_row_item = stoi(edges_row_temp[j]);
-
-                edges[i][j] = edges_row_item;
+                // scale
+                edges[i][j] = edges_row_item - 1;
             }
         }
 
@@ -61,11 +107,13 @@ int main()
         getline(cin, s_temp);
 
         int s = stoi(ltrim(rtrim(s_temp)));
-
-        vector<int> result = shortestReach(n, m, edges, s);
+        
+        // scale
+        vector<int> result = shortestReach(n, m, edges, s - 1);
 
         for (size_t i = 0; i < result.size(); i++) {
-            fout << result[i];
+            if (result[i] != 0)
+                fout << result[i];
 
             if (i != result.size() - 1) {
                 fout << " ";
