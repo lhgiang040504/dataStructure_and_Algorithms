@@ -56,12 +56,12 @@ Explanation
 
 We perform the following two queries:
 
-The given graph can be represented as:![image](https://github.com/lhgiang040504/dataStructure_and_Algorithms/assets/121398839/499f2178-8f86-4cb1-a9d4-0d91ebba6509)
-
+The given graph can be represented as:
+![image](https://github.com/lhgiang040504/dataStructure_and_Algorithms/assets/121398839/499f2178-8f86-4cb1-a9d4-0d91ebba6509)
 where our start node, , is node . The shortest distances from  to the other nodes are one edge to node , one edge to node , and an infinite distance to node  (which it is not connected to). We then return an array of distances from node  to nodes , , and  (respectively): .
 
-The given graph can be represented as:![image](https://github.com/lhgiang040504/dataStructure_and_Algorithms/assets/121398839/31905008-9917-46ed-b80a-028df1985c52)
-
+The given graph can be represented as:
+![image](https://github.com/lhgiang040504/dataStructure_and_Algorithms/assets/121398839/31905008-9917-46ed-b80a-028df1985c52)
 where our start node, , is node . There is only one edge here, so node  is unreachable from node  and node  has one edge connecting it to node . We then return an array of distances from node  to nodes , and  (respectively): .
 
 Note: Recall that the actual length of each edge is , and we return  as the distance to any node that is unreachable from .
