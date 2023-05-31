@@ -17,31 +17,7 @@ vector<string> split(const string &);
  *  4. INTEGER s start point
  */
 
-int getShortestDistance(int start, int end, vector<int> adjList[], int dist) {
-    vector<bool> visited(adjList->size(), false);
-    queue<int> q;
 
-    q.push(start);
-    visited[start] = true;
-
-    while (!q.empty()) {
-        int currNode = q.front();
-        q.pop();
-
-        if (currNode == end) {
-            return dist;
-        }
-
-        for (int neighbor : adjList[currNode]) {
-            if (!visited[neighbor]) {
-                q.push(neighbor);
-                visited[neighbor] = true;
-            }
-            dist += 6;
-        }
-    }
-    return -1;
-}
 
 vector<int> shortestReach(int n, int m, vector<vector<int>> edges, int s) {
     vector<int> adjList[n];
@@ -49,21 +25,27 @@ vector<int> shortestReach(int n, int m, vector<vector<int>> edges, int s) {
         adjList[pair[0]].push_back(pair[1]);
         adjList[pair[1]].push_back(pair[0]);
     }
-    vector<int> dist(n, 0);
+    vector<int> dist(n, -1);
     vector<bool> visited(n, false); // Track visited point
+    dist[s] = 0;
     visited[s] = true;
 
-    for (const auto& node : adjList[s]) {
-        visited[node] = true;
-        dist[node] += 6;
-    }
+    queue<int> q;
+    q.push(s);
 
-    for (int neighbor : adjList[s]) {
-        if (!visited[neighbor]) {
-            visited[neighbor] = true;
-            dist[neighbor] = getShortestDistance(s, neighbor, adjList, 6);
+    while (!q.empty()) {
+        int currNode = q.front();
+        q.pop();
+
+        for (int neighbor : adjList[currNode]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                dist[neighbor] = dist[currNode] + 6;  // Update distance to neighbor
+                q.push(neighbor);
+            }
         }
     }
+
     return dist;
 }
 
@@ -111,8 +93,8 @@ int main()
         // scale
         vector<int> result = shortestReach(n, m, edges, s - 1);
 
-        for (size_t i = 0; i < result.size(); i++) {
-            if (result[i] != 0)
+        for (int i = 0; i < result.size(); i++) {
+            if (i != s - 1)
                 fout << result[i];
 
             if (i != result.size() - 1) {
