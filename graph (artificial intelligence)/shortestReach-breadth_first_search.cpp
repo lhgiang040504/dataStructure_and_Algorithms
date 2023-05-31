@@ -17,7 +17,7 @@ vector<string> split(const string &);
  *  4. INTEGER s start point
  */
 
-
+// notice: already scale input
 
 vector<int> shortestReach(int n, int m, vector<vector<int>> edges, int s) {
     vector<int> adjList[n];
