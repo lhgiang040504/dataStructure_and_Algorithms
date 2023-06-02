@@ -7,7 +7,10 @@ One specific node S is fixed as the starting point of finding the subgraph using
 Find the total weight or the sum of all edges in the subgraph.
 
 Example
+
 ![image](https://github.com/lhgiang040504/dataStructure_and_Algorithms/assets/121398839/0fe5c646-cb17-404e-974d-612b54a41a5c)
+
+
 Starting from node , select the lower weight edge, i.e. , weight .
 
 Choose between the remaining edges, , weight , and , weight .
