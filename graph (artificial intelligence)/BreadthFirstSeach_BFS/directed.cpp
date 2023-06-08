@@ -16,7 +16,6 @@ stack<int> DFS(int start, int end, int n, vector<vector<int>> adjustList) {
     stack<int> open;
     open.push(start);
     visited[start] = true;
-    parent[start] = -2;
 
     // To complete the parent vector by DFS travel
     while (!open.empty()) {
@@ -24,31 +23,38 @@ stack<int> DFS(int start, int end, int n, vector<vector<int>> adjustList) {
         if (node == end)
             break;
         open.pop(); 
-        for (auto& nodes : adjustList[node])
-            if (!visited[nodes]) {
-                open.push(nodes);
-                visited[nodes] = true;
-                parent[nodes] = node;
-            }
+        
+        if (!(adjustList[node].empty())) 
+            for (auto& nodes : adjustList[node])
+                if (!visited[nodes]) {
+                    open.push(nodes);
+                    visited[nodes] = true;
+                    parent[nodes] = node;
+                }
+
     }
     
-    // Get the path from parent vector by travel from the end to start
-    stack<int> path;
-    if (open.empty()) 
-        path.push(-1);
+    if (open.empty()) {
+        // No path exists, return an empty stack or a special value
+        stack<int> emptyStack;
+        return emptyStack;
+        // Alternatively, you can return a special value like -1 or INT_MAX
+    }
     else {
+        stack<int> path;
+
         path.push(end);
         int parentNode = parent[end];
-        
+
         while (parentNode != start) {
             path.push(parentNode);
             parentNode = parent[parentNode];
         }
 
         path.push(start);
-    }
-    // Finally get the path
-    return path;
+        // Finally get the path
+        return path;
+    } 
 }
 
 int main() {
@@ -66,7 +72,7 @@ int main() {
 
     unordered_map<string, int> encodedMap;
     // Encoding the vector
-    for (int i = 0; i < list_Nodes.size(); ++i)
+    for (int i = 0; i < list_Nodes.size(); i++)
         encodedMap[list_Nodes[i]] = i;
 
     // Create an adjustList
@@ -79,7 +85,7 @@ int main() {
         vector<string> t_from_to = split(t_from_to_temp);
         adjList[encodedMap[t_from_to[0]]].push_back(encodedMap[t_from_to[1]]);
     }
-
+    
     int numPair;
     cin >> numPair;
 
@@ -95,7 +101,7 @@ int main() {
     }
 
     for (int i = 0; i < numPair; i++) {
-        if (Path[i].top() == -1)
+        if (Path[i].empty())
             cout << "no_path" << "\n";
         else {
             while (!Path[i].empty()) {
@@ -105,6 +111,7 @@ int main() {
             cout << endl;
         }
     }
+
     return 0;
 }
 

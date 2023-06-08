@@ -1,26 +1,27 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <queue>
 #include <stack>
 using namespace std;
 
 vector<string> split(const string &);
 
-stack<int> DFS(int start, int end, int n, vector<vector<int>> adjustList) {
+stack<int> BFS(int start, int end, int n, vector<vector<int>> adjustList) {
     // Track of node visited
     vector<bool> visited(n, false);
 
     // Track of parent of each node
     vector<int> parent(n);
 
-    stack<int> open;
+    queue<int> open;
     open.push(start);
     visited[start] = true;
     parent[start] = -1;
 
-    // To complete the parent vector by DFS travel
+    // To complete the parent vector by BFS travel
     while (!open.empty()) {
-        int node = open.top();
+        int node = open.front();
         if (node == end)
             break;
         open.pop(); 
@@ -59,7 +60,6 @@ int main() {
     int t_edges = stoi(t_nodes_edges[1]);
 
     string listNode;
-    cin.ignore();
     getline(cin, listNode);
     vector<string> list_Nodes = split(listNode);
 
@@ -90,7 +90,7 @@ int main() {
         
         vector<string> t_from_to = split(t_from_to_temp);
 
-        Path[i] = DFS(encodedMap[t_from_to[0]], encodedMap[t_from_to[1]], t_nodes, adjList);
+        Path[i] = BFS(encodedMap[t_from_to[0]], encodedMap[t_from_to[1]], t_nodes, adjList);
     }
 
     for (int i = 0; i < numPair; i++) {
