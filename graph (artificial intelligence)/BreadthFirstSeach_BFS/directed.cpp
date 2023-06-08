@@ -4,6 +4,7 @@
 #include <stack>
 using namespace std;
 
+vector<string> split(const string &);
 
 stack<int> DFS(int start, int end, int n, vector<vector<int>> adjustList) {
     // Track of node visited
@@ -15,7 +16,7 @@ stack<int> DFS(int start, int end, int n, vector<vector<int>> adjustList) {
     stack<int> open;
     open.push(start);
     visited[start] = true;
-    parent[start] = -1;
+    parent[start] = -2;
 
     // To complete the parent vector by DFS travel
     while (!open.empty()) {
@@ -96,11 +97,13 @@ int main() {
     for (int i = 0; i < numPair; i++) {
         if (Path[i].top() == -1)
             cout << "no_path" << "\n";
-        else
+        else {
             while (!Path[i].empty()) {
                 cout << list_Nodes[Path[i].top()] << " ";
                 Path[i].pop();
             }
+            cout << endl;
+        }
     }
     return 0;
 }
