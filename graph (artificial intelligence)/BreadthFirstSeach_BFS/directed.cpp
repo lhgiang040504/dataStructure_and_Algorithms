@@ -1,60 +1,49 @@
-#include <iostream>
-#include <vector>
-#include <unordered_map>
-#include <stack>
+#include <bits/stdc++.h>
 using namespace std;
 
 vector<string> split(const string &);
 
-stack<int> DFS(int start, int end, int n, vector<vector<int>> adjustList) {
+stack<int> BFS(int start, int end, int n, vector<vector<int>> adjustList) {
     // Track of node visited
     vector<bool> visited(n, false);
 
     // Track of parent of each node
     vector<int> parent(n);
 
-    stack<int> open;
+    queue<int> open;
     open.push(start);
     visited[start] = true;
+    parent[start] = -1;
 
-    // To complete the parent vector by DFS travel
+    // To complete the parent vector by BFS travel
     while (!open.empty()) {
-        int node = open.top();
+        int node = open.front();
         if (node == end)
             break;
         open.pop(); 
-        
-        if (!(adjustList[node].empty())) 
-            for (auto& nodes : adjustList[node])
-                if (!visited[nodes]) {
-                    open.push(nodes);
-                    visited[nodes] = true;
-                    parent[nodes] = node;
-                }
-
+        for (auto& nodes : adjustList[node])
+            if (!visited[nodes]) {
+                open.push(nodes);
+                visited[nodes] = true;
+                parent[nodes] = node;
+            }
     }
-    
-    if (open.empty()) {
-        // No path exists, return an empty stack or a special value
-        stack<int> emptyStack;
-        return emptyStack;
-        // Alternatively, you can return a special value like -1 or INT_MAX
-    }
-    else {
-        stack<int> path;
 
+    // Get the path from parent vector by travel from the end to start
+    stack<int> path;
+    if (!open.empty()) {
         path.push(end);
         int parentNode = parent[end];
-
+        
         while (parentNode != start) {
             path.push(parentNode);
             parentNode = parent[parentNode];
         }
 
         path.push(start);
-        // Finally get the path
-        return path;
-    } 
+    }
+    // Finally get the path
+    return path;
 }
 
 int main() {
@@ -72,12 +61,11 @@ int main() {
 
     unordered_map<string, int> encodedMap;
     // Encoding the vector
-    for (int i = 0; i < list_Nodes.size(); i++)
+    for (int i = 0; i < list_Nodes.size(); ++i)
         encodedMap[list_Nodes[i]] = i;
 
     // Create an adjustList
     vector<vector<int>> adjList(t_nodes);
-
     for (int i = 0; i < t_edges; i++) {
         string t_from_to_temp;
         getline(cin, t_from_to_temp);
@@ -85,7 +73,7 @@ int main() {
         vector<string> t_from_to = split(t_from_to_temp);
         adjList[encodedMap[t_from_to[0]]].push_back(encodedMap[t_from_to[1]]);
     }
-    
+
     int numPair;
     cin >> numPair;
 
@@ -97,7 +85,7 @@ int main() {
         
         vector<string> t_from_to = split(t_from_to_temp);
 
-        Path[i] = DFS(encodedMap[t_from_to[0]], encodedMap[t_from_to[1]], t_nodes, adjList);
+        Path[i] = BFS(encodedMap[t_from_to[0]], encodedMap[t_from_to[1]], t_nodes, adjList);
     }
 
     for (int i = 0; i < numPair; i++) {
@@ -111,7 +99,6 @@ int main() {
             cout << endl;
         }
     }
-
     return 0;
 }
 
