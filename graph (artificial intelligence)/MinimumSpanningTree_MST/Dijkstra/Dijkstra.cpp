@@ -1,109 +1,124 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <limits>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-typedef pair<int, int> pii; // Pair of (vertex, weight)
-typedef vector<vector<pii>> Graph; // Adjacency list representation of graph
+vector<string> split(const string &);
 
-const int INF = numeric_limits<int>::max(); // Infinity value for distance
+void Dijkstra(string a, string b, unordered_map<string, vector<pair<string, int>>> adjList) {
+    unordered_map<string, bool> visited;
+    unordered_map<string, string> parent;
 
-// Dijkstra's algorithm to find shortest paths from a source vertex
-void dijkstra(const Graph& graph, int source, vector<int>& distances, vector<int>& previous)
-{
-    int n = graph.size();
-    distances.assign(n, INF);
-    previous.assign(n, -1);
-
-    priority_queue<pii, vector<pii>, greater<pii>> pq;
-    distances[source] = 0;
-    pq.push(make_pair(0, source));
-
-    while (!pq.empty()) {
-        int u = pq.top().second;
-        pq.pop();
-
-        for (const auto& edge : graph[u]) {
-            int v = edge.first;
-            int weight = edge.second;
-
-            if (distances[u] + weight < distances[v]) {
-                distances[v] = distances[u] + weight;
-                previous[v] = u;
-                pq.push(make_pair(distances[v], v));
+    unordered_map<string, int> Open;
+    Open.insert({a, 0});
+    
+    while (!Open.empty()) {
+        // Get edge that has min weight
+        auto minWeight = min_element(Open.begin(), Open.end(), 
+            [](const auto& a, const auto& b) {
+                               return a.second < b.second;
+            });
+    
+        if (minWeight->first == b)
+            break;
+    
+        string from = minWeight->first;
+        Open.erase(minWeight->first);
+        for (auto& i : adjList[from]) {
+            visited[from] = true;
+            
+            // note: one important condition that replace the one by their better
+            if (visited[i.first]) {
+                if (i.second >= Open[i.first])
+                    continue;
+                Open[i.first] = i.second;
             }
+            else {
+                Open.insert({i.first, i.second});
+                visited[i.first] = true;
+            }
+            
+            parent[i.first] = from; 
         }
     }
+    
+    int cost = 0;
+    string res = "";
+    for(string at = b; at != a; at = parent[at]) {
+        
+        for (const auto& pair : adjList[parent[at]]) {
+            if (pair.first == at) {
+                cost += pair.second;
+                break;
+            }
+        }
+
+        res = at + res;
+        res = " " + res;
+    }
+    res = a + res;
+    cout << res << cost << "\n";
 }
 
-// Retrieve shortest path from source to destination using previous array
-vector<int> getShortestPath(int source, int destination, const vector<int>& previous)
-{
-    vector<int> path;
-    int current = destination;
-    while (current != -1) {
-        path.insert(path.begin(), current);
-        current = previous[current];
+int main() {
+    string t_nodes_edges_temp;
+    getline(cin, t_nodes_edges_temp);
+
+    // Address the format inut
+    vector<string> t_nodes_edges = split(t_nodes_edges_temp);
+    int t_nodes = stoi(t_nodes_edges[0]);
+    int t_edges = stoi(t_nodes_edges[1]);
+
+    string listNode;
+    getline(cin, listNode);
+    vector<string> list_Nodes = split(listNode);
+
+    // Create an adjustList
+    unordered_map<string, vector<pair<string, int>>> adjList;
+
+    for (int i = 0; i < t_edges; i++) {
+        string t_from_to_weight_temp;
+        getline(cin, t_from_to_weight_temp);
+
+        vector<string> t_from_to_weight = split(t_from_to_weight_temp);
+        string from = t_from_to_weight[0];
+        string to = t_from_to_weight[1];
+        int weight = stoi(t_from_to_weight[2]);
+
+        adjList[from].push_back(make_pair(to, weight));
     }
-    return path;
-}
+    
+    int numPair;
+    cin >> numPair;
+    vector<pair<string, string>> Pair;
+    cin.ignore();
+    for (int i = 0; i < numPair; i++) {
+        string t_from_to_temp;
+        
+        getline(cin, t_from_to_temp);
+        
+        vector<string> input = split(t_from_to_temp);
 
-// Print shortest path and distance
-void printShortestPath(int source, int destination, const vector<int>& distances, const vector<int>& previous)
-{
-    vector<int> path = getShortestPath(source, destination, previous);
-
-    if (path.empty()) {
-        cout << "no_path" << endl;
-        return;
+        Pair.push_back(make_pair(input[0], input[1]));
     }
-
-    cout << "Shortest path from " << source << " to " << destination << ": ";
-    for (int i = 0; i < path.size(); i++) {
-        cout << path[i];
-        if (i != path.size() - 1)
-            cout << " -> ";
-    }
-    cout << endl;
-
-    cout << "Distance: " << distances[destination] << endl;
-}
-
-int main()
-{
-    int n, e;
-    cout << "Enter the number of vertices: ";
-    cin >> n;
-    cout << "Enter the number of edges: ";
-    cin >> e;
-
-    Graph graph(n);
-
-    cout << "Enter the edges and their weights:" << endl;
-    for (int i = 0; i < e; i++) {
-        int u, v, weight;
-        cin >> u >> v >> weight;
-        graph[u].push_back(make_pair(v, weight));
-        graph[v].push_back(make_pair(u, weight));
-    }
-
-    int m;
-    cout << "Enter the number of paths to find: ";
-    cin >> m;
-
-    cout << endl;
-
-    for (int i = 0; i < m; i++) {
-        int source, destination;
-        cout << "Enter the source vertex and destination vertex for path " << i + 1 << ": ";
-        cin >> source >> destination;
-        vector<int> distances, previous;
-        dijkstra(graph, source, distances, previous);
-        printShortestPath(source, destination, distances, previous);
-        cout << endl;
-    }
-
+    
+    for (auto it = Pair.begin(); it != Pair.end(); it++) 
+        Dijkstra((*it).first, (*it).second, adjList);
+        
     return 0;
+}
+
+vector<string> split(const string &str) {
+    vector<string> tokens;
+
+    string::size_type start = 0;
+    string::size_type end = 0;
+
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+
+        start = end + 1;
+    }
+
+    tokens.push_back(str.substr(start));
+
+    return tokens;
 }
