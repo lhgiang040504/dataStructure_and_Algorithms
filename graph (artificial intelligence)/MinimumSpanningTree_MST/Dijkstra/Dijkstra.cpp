@@ -29,7 +29,7 @@ void Dijkstra(string a, string b, unordered_map<string, vector<pair<string, int>
             if (visited[i.first]) {
                 if (i.second >= Open[i.first])
                     continue;
-                Open[i.first] = i.second;
+                
             }
             else {
                 Open.insert({i.first, i.second});
@@ -55,7 +55,7 @@ void Dijkstra(string a, string b, unordered_map<string, vector<pair<string, int>
         res = " " + res;
     }
     res = a + res;
-    cout << res << cost << "\n";
+    cout << res << "\n";
 }
 
 int main() {
