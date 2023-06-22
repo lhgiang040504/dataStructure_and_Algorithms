@@ -45,20 +45,23 @@ class Node {
 */
   
     Node *lca(Node *root, int v1,int v2) {
-        int greater = (v1 + v2) / 2.0 + abs(v1 - v2) / 2.0;
-        int smaller = (v1 + v2) / 2.0 - abs(v1 - v2) / 2.0;
+        //int greater = (v1 + v2) / 2.0 + abs(v1 - v2) / 2.0;
+        //int smaller = (v1 + v2) / 2.0 - abs(v1 - v2) / 2.0;
         
-        int ancestor = root->data;
+        if (root == NULL)
+            return NULL;
 
-        if (ancestor > greater) 
-            root = root->left;
-        else if (ancestor <= smaller)
-            root = root->right;
+        int greater = max(v1, v2);
+        int smaller = min(v1, v2);
+
+        if (root->data > greater)
+            return lca(root->left, v1, v2);
+        
+        else if (root->data < smaller)
+            return lca(root->right, v1, v2);
+        
         else
             return root;
-        
-        return lca(root, v1, v2);
-
     }
 
 }; //End of Solution
