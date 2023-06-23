@@ -24,7 +24,7 @@ void insertion_sort_p1(int *arr, int n){
 void insertion_sort_p2(int *a, int n){
     int i = 0;
     while(i < n - 1){
-        if(a[i] > a[i+1]){
+        if(a[i] > a[i+1]) {
             swap(a[i], a[i+1]);
             i --;
         }
@@ -46,3 +46,12 @@ int main(){
     output(arr, n);
     return 0;
 }
+
+/*
+n is the number of element, complexity
+
+p1:
+    best-case scenario: O(n) no swaps are necessary
+    worst case scenerio: O(n^2), all elements need to be sorted
+    
+*/

@@ -47,3 +47,12 @@ int main(){
     output(result);
     return 0;
 }
+/*
+    Time Complexity: O(n log(n))
+    
+    Space Complexity: O(n)
+        Space Complexity:
+            Merge Sort has a space complexity of O(n) because it creates temporary vectors during the merging process to store the sorted elements.
+            The additional space required is proportional to the size of the input vector.
+
+*/

@@ -52,3 +52,17 @@ int main(){
     return 0;
 }
 // complexity O(nlog(n))
+
+/*
+Time Complexity:
+    Building the Heap: The initial step of Heap Sort is to build a max heap from the input array.
+The heapify operation is performed for each element in the array.
+The heapify operation has a time complexity of O(log(n)) because it compares and swaps elements as it moves down the height of the heap.
+Since there are n elements in the array, performing heapify for each element results in a total time complexity of O(n log(n)) for building the heap.
+
+    Sorting: Once the max heap is built, the sorting phase involves repeatedly swapping the largest element (root) with the last element of the heap and then performing a heapify operation to restore the heap property.
+Each swap operation takes constant time, and the heapify operation has a time complexity of O(log(n)) as it sifts down the swapped element to its correct position. Since there are n elements in the heap, the total time complexity for the sorting phase is also O(n log(n)).
+
+Space Complexity:
+    Heap Sort has a space complexity of O(1) because it sorts the array in-place without requiring any additional data structures that grow with the input size. The swapping and heapify operations are performed within the input array itself.
+*/
