@@ -43,11 +43,30 @@ public:
         }
     }
 
+    void ReveserDirection() {
+        if (root == NULL || root->next == NULL)
+            return; // Empty list or single node, no need to reverse
+
+        SinglyLinkedListNode* curr = root;
+        SinglyLinkedListNode* reverse = NULL;
+        SinglyLinkedListNode* prev = NULL;
+
+        while (curr != NULL) {
+            reverse = curr;
+            curr = curr->next;
+    
+            reverse->next = prev; 
+            prev = reverse;
+        }
+
+        root = reverse;
+    }
 };
 
 int main() {
     LinkedList llist;
     llist.Input();
+    llist.ReveserDirection();
     llist.Output();
     
     return 0;
