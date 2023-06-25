@@ -61,6 +61,19 @@ public:
 
         root = reverse;
     }
+
+    bool Find(int data) {
+        SinglyLinkedListNode* temp = root;
+    
+        while (temp != NULL) {
+            if (temp -> data == data )
+                return true;
+            else 
+                temp = temp-> next;
+        }
+
+        return false;
+    }
 };
 
 int main() {
