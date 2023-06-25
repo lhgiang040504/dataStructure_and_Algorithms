@@ -62,17 +62,34 @@ public:
         root = reverse;
     }
 
-    bool Find(int data) {
+    SinglyLinkedListNode* Find(int data) {
         SinglyLinkedListNode* temp = root;
     
         while (temp != NULL) {
             if (temp -> data == data )
-                return true;
+                return temp;
+            temp = temp-> next ;
+        }
+        
+        return NULL;
+    }
+
+    void Delete(int data) {
+        SinglyLinkedListNode* temp = root;
+        SinglyLinkedListNode* curr = Find(data);
+        if (curr) {
+            if (curr == root) 
+                root = root->next;
+    
             else 
-                temp = temp-> next;
+                while (temp->next != Find(data)) {
+                    temp = temp->next;
+                }   
+            
+            temp->next = curr->next;
+            delete curr;
         }
 
-        return false;
     }
 };
 
