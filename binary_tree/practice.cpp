@@ -99,6 +99,43 @@ private:
         return curr;
     }    
 // ----------
+    // Traversal functions
+    void printLRN(Node* curr) {
+        if (curr == nullptr)
+            return;
+        
+        printLRN(curr->left);
+        printLRN(curr->right);
+        cout << curr->data << " ";
+    }
+
+    void printNRL(Node* curr) {
+        if (curr == nullptr)
+            return;
+
+        cout << curr->data << " ";
+        printNRL(curr->right);
+        printNRL(curr->left);
+    }
+    // Decrease
+    void printRNL(Node* curr) {
+        if (curr == nullptr)
+            return;
+
+        printRNL(curr->right);
+        cout << curr->data << " ";
+        printRNL(curr->left);
+    }
+    // Increase
+    void printLNR(Node* curr) {
+        if (curr == nullptr)
+            return;
+
+        printLNR(curr->left);
+        cout << curr->data << " ";
+        printLNR(curr->right);
+    }
+
     void deleteTree(Node* node) {
         if (node == nullptr)
             return;
@@ -124,6 +161,12 @@ public:
     void remove(int val) {
         root = deleteNode(root, val);
     }
+
+    void printLRN() {
+        printLRN(root);
+        cout << endl;
+    }
+
 };
 
 int main() {
