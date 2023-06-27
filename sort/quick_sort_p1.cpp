@@ -26,6 +26,27 @@ vector<int> quick_sort(vector<int> arr){
         right = quick_sort(right);
     left.insert(left.end(), right.begin(), right.end());
     return left;
+/*
+    int pivot = arr[0];
+    std::vector<int> left, equal, right;
+
+    for (int num : arr) {
+        if (num < pivot)
+            left.push_back(num);
+        else if (num == pivot)
+            equal.push_back(num);
+        else
+            right.push_back(num);
+    }
+
+    std::vector<int> result;
+    result.reserve(left.size() + equal.size() + right.size());
+    result.insert(result.end(), left.begin(), left.end());
+    result.insert(result.end(), equal.begin(), equal.end());
+    result.insert(result.end(), right.begin(), right.end());
+
+    return result;
+*/
 }
 
 
